@@ -1,0 +1,88 @@
+Получение записей из бд
+Получение нескольких строк из таблицы:
+
+// создаем запрос
+$select = array(
+    'where' => 'id >= 1 AND id <= 5', // условие
+    'group' => 'first_name', // группируем
+    'order' => 'id DESC', // сортируем
+    'limit' => 10 // задаем лимит
+);
+$model = new Model_Users($select); // создаем объект модели
+$usersInfo = $model->getAllRows(); // получаем все строки
+var_dump($usersInfo); // выводим данные
+Получение одной строки из таблицы:
+
+$select = array(
+    'where' => 'id = 2'
+);
+$model = new Model_Users($select);
+$usersInfo = $model->getOneRow();
+var_dump($usersInfo);
+Помимо получения строк, мы можем получать значения конкретных столбцов:
+
+// запрос
+$select = array(
+    'where' => 'id = 2'
+);
+$model = new Model_Users($select);
+$model->fetchOne(); // извлекаем данные
+// получаем значения столбцов
+$firstName = $model->first_name;
+$lastName = $model->last_name;
+// выводим
+var_dump($firstName);
+var_dump($lastName);
+Создание записи в бд
+Также просто, как и получать, мы можем и записывать данные:
+
+// создаем объект
+$model = new Model_Users();
+// задаем значения для полей таблицы
+$model->id = 10; // id можно и пропустить, если для этого поля настроен авто инкремент
+$model->first_name = 'Иван';
+$model->last_name = 'Иванов';
+$result = $model->save(); // создаем запись
+var_dump($result); // проверяем результат:  true или false
+Обновление записи в бд
+Обновление записей в таблице тоже не составит проблем, выглядеть это будет так:
+
+// запрос
+$select = array(
+    'where' => 'id = 10'
+);
+// модель
+$model = new Model_Users($select);
+// извлекаем данные
+$model->fetchOne();
+// задаем новые значения
+$model->first_name = 'Петр';
+$model->last_name = 'Петров';
+// обновляем запись
+$result = $model->update();
+var_dump($result); // проверяем результат:  true или false
+Удаление записи в бд
+И последнее элементарное действие с базой данных – удаление записей.
+
+// модель
+$model = new Model_Users();
+// условие удаления
+$select = array(
+    'where' => 'id > 10'
+);
+// удаляем
+$result = $model->deleteBySelect($select);
+var_dump($result); // проверяем результат. Вернется количество удаленных строк
+И еще один доступный вариант удаления, для одной записи:
+
+// запрос
+$select = array(
+    'where' => 'id = 10'
+);
+// модель
+$model = new Model_Users($select);
+// извлекаем данные
+$model->fetchOne();
+// удаляем строку
+$result = $model->deleteRow();
+var_dump($result);
