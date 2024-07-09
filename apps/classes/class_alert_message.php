@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class Class_Alert_Message - ывод сообщения об ошибках на вверху страници
+ * Class Class_Alert_Message - вывод сообщения об ошибках на вверху страници
  */
 class Class_Alert_Message
 {
