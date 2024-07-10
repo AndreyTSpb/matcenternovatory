@@ -14,7 +14,7 @@ class StringsCreateTables
      * @return string
      */
     function createTableCustomers(){
-        return "CREATE TABLE `test_bd`.`сustomers` ".
+        return "CREATE TABLE `customers` ".
             "(`id` INT NOT NULL AUTO_INCREMENT , ".
             "`name` VARCHAR(255) NULL , ".
             "`email` VARCHAR(255) NULL , ".
@@ -50,7 +50,7 @@ class StringsCreateTables
      * @return string
      */
     function createTableTeachers(){
-        return "CREATE TABLE `test_bd`.`teachers` (`id` INT NOT NULL AUTO_INCREMENT , ".
+        return "CREATE TABLE `teachers` (`id` INT NOT NULL AUTO_INCREMENT , ".
             "`name` VARCHAR(255) NULL , ".
             "`dt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , ".
             "`email` VARCHAR(255) NULL , ".
