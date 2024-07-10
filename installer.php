@@ -89,13 +89,18 @@
         include "apps/core/db.php";
         $objConDb = new install\connect_db\Class_Connect_DB(DB_HOST, DB_USER, DB_PASS, DB_NAME);
         //$rez = $objConDb->link->query("INSERT INTO `users` (`id`, `name`, `email`, `pass`, `del`) VALUES (NULL, 'Administrator', '".$_POST["login"]."', '".md5($pass)."', '0');");
-        $objConDb->link->query("INSERT INTO `users` (`id`, `name`, `email`, `pass`, `del`) VALUES (NULL, 'Administrator', '".$_POST["login"]."', '".md5($pass)."', '0');");
+        $objConDb->link->query("INSERT INTO `users` (`id`, `name`, `email`, `pass`, `del`) VALUES (NULL, 'Administrator', '".$_POST["login"]."', '".$_POST["password1"]."', '0');");
         header("Location: /install.php");
         exit();
     }
 
+    /**
+     * Удаление инсталятора
+     */
     if(isset($_POST['SEND_END'])){
-
+        unlink("installer.php");
+        header("Location: /");
+        exit();
     }
 
     /**
