@@ -72,6 +72,7 @@ class StringsCreateTables
                     "`name` VARCHAR(255) NOT NULL , ".
                     "`email` VARCHAR(255) NOT NULL , ".
                     "`pass` VARCHAR(255) NOT NULL , ".
+                    "`session_id` VARCHAR(255) NOT NULL , ".
                     "`del` INT(1) NOT NULL DEFAULT '0' , PRIMARY KEY (`id`))".
                 " ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_general_ci COMMENT = 'Таблица с пользователями системы';";
     }

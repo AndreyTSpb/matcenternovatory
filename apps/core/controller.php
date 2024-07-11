@@ -13,6 +13,10 @@ class Controller {
 
     public function __construct()
     {
+        $objChek = new Class_ChekPass();
+        if($objChek->checkCookie($_COOKIE['id_user'], $_COOKIE['session_id'])){
+
+        }
         $this->model = new Model();
         if(!empty($_COOKIE['id_user'])) $this->model->id_user = (int)$_COOKIE['id_user'];
         if(!empty($_COOKIE['session_id'])) $this->model->session_id = $_COOKIE['session_id'];

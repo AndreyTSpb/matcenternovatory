@@ -21,7 +21,7 @@ class CreateModelDbFiles{
         $this->tableName = strtolower($tableName);
         $this->link = $link;
         $this->arrFields = $arrFields;
-        $this->fileName =   "model_".$this->tableName.".php";
+        $this->fileName =   "Model_".ucfirst($this->tableName).".php";
         $this->createFile();
     }
 
@@ -34,7 +34,7 @@ class CreateModelDbFiles{
         }
 
         $text = "<?php ".
-            "class Model_".$this->tableName." extends Mysql\n".
+            "class Model_".ucfirst($this->tableName)." extends Mysql\n".
             "{\n". $strProp ."\n".
             "   public function fieldsTable() {\n".
             "        return array(\n".
