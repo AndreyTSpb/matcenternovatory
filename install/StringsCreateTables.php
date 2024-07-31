@@ -117,4 +117,18 @@ class StringsCreateTables
     }
 
 
+    /**
+     * Создание таблицы с опциями(редко меняющимися значениями)
+     * @return string
+     */
+    function createTableOptions(){
+        return "CREATE TABLE `test_bd`.`options` ".
+            "(`id` INT NOT NULL AUTO_INCREMENT , ".
+            "`name` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL , ".
+            "`value` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL , ".
+            "`del` INT(1) NOT NULL DEFAULT '0' , ".
+            "PRIMARY KEY (`id`)) ENGINE = InnoDB;";
+    }
+
+
 }

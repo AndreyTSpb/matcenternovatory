@@ -1,13 +1,11 @@
 <?php
 ?>
 <ul class="navbar-nav me-auto mb-2 mb-md-0">
-    <li class="nav-item">
-        <a href="<?=DOCUMENT_ROOT;?>/admin_dashboard" class="nav-link active" aria-current="page">Заявки</a>
-    </li>
-    <li class="nav-item">
-        <a href="<?=DOCUMENT_ROOT;?>/admin_archive_orders" class="nav-link" >Выполненые</a>
-    </li>
-    <li class="nav-item">
-        <a href="<?=DOCUMENT_ROOT;?>/directory" class="nav-link">Администрирование</a>
-    </li>
+    <?php if(isset($menu) AND !empty($menu)):?>
+        <?php foreach($menu AS $item_name => $item_url):?>
+            <li class="nav-item">
+                <a href="<?=DOCUMENT_ROOT;?>/<?=$item_url?>" class="nav-link <?=($item_url == trim($url,'/'))?'active':''?>active" aria-current="page"><?=$item_name;?></a>
+            </li>
+        <?php endforeach;?>
+    <?php endif;?>
 </ul>

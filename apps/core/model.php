@@ -19,8 +19,24 @@ class Model
     function __construct()
     {
         $this->role = 2;
-        $this->nameCompany = 'nameCompany';
-        $this->labelCompany = 'bootstrap-logo.svg';
+        $options = $this->getOptions();
+
+        $this->nameCompany = (!empty($options['nameCompany']))?$options['nameCompany']:'nameCompany';
+        $this->labelCompany = (!empty($options['labelCompany']))?$options['labelCompany']:'bootstrap-logo.svg';
+    }
+
+    /**
+     * Получаем основные данные из опцй
+     * @return array = Array ( [nameCompany] => Математический Центр г. Москва [labelCompany] => math.png )
+     */
+    private function getOptions(){
+        $obj = new Model_Options(array("where"=>"del = 0"));
+        $rows = $obj->getAllRows();
+        $options = array();
+        foreach ($rows AS $row){
+            $options[$row['name']] = $row['value'];
+        }
+        return $options;
     }
 
     /*
@@ -34,7 +50,6 @@ class Model
     // метод выборки данных
     public function get_data()
     {
-        // todo
         return true;
     }
 

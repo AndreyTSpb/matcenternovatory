@@ -1,6 +1,9 @@
 <?php
 
 
+/**
+ * Class Class_Generator_Token - генератор токена для сессии
+ */
 class Class_Generator_Token
 {
     static  function generator(){

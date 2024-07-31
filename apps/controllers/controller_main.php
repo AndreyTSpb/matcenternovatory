@@ -16,9 +16,8 @@ Class Controller_Main extends Controller
 
     function action_index()
     {
+        $data = $this->data;
 
-        $data['nameCompany'] = $this->model->nameCompany;
-        $data['labelCompany'] = $this->model->labelCompany;
         if($this->model->role == 1){
             $data['title']      = "Мои заявки";
             $data['view_menu_file'] = 'admin_menu.php';
@@ -45,6 +44,7 @@ Class Controller_Main extends Controller
             );
             $data['view_menu_file'] = 'user_menu.php';
         }
+
         $this->view->generate('order_view.php', 'page.php', $data);
     }
 }

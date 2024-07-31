@@ -26,12 +26,16 @@
             </section>
         <?php endif;?>
         <!-- ./End Alert Notes -->
-
+    <?php if($url !== "/login"):?>
         <header>
+
             <!-- Fixed navbar -->
             <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="#"><?=$nameCompany?></a>
+                    <a class="navbar-brand" href="#">
+                        <img src="<?=DOCUMENT_STATIC?>/images/<?=$labelCompany;?>" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+                        <?=$nameCompany?>
+                    </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -45,6 +49,7 @@
                 </div>
             </nav>
         </header>
+        <?php endif;?>
 
         <!-- Begin page content -->
         <!-- Вставляем файл контента -->
@@ -56,6 +61,8 @@
                 <span class="text-muted">Place sticky footer content here.</span>
             </div>
         </footer>
+        <?php print_r($_SESSION);?>
+        <?php print_r($_COOKIE);?>
 
         <!-- Clear alert message -->
         <?php Class_Alert_Message::clear();?>
