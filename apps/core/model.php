@@ -53,4 +53,14 @@ class Model
         return true;
     }
 
+    /**
+     * Список быстрых комманд на странице
+     */
+    function getActionButtons(){
+        return array(
+            "Выставить счет" => "bill/add",
+            "Добавить клиента" => "customer/add",
+            "Добавить препода" => "teacher/add"
+        );
+    }
 }

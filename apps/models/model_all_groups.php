@@ -48,7 +48,7 @@ class Model_All_Groups extends Model
             );
         }else{
             $rows = $obj->getAllRows();
-            foreach ($rows AS $id_group => $item){
+            foreach ($rows AS $item){
                 $strDay = '';
                 if($item['mon']) $strDay .="mon, ";
                 if($item['tue']) $strDay .="tue, ";
@@ -61,12 +61,12 @@ class Model_All_Groups extends Model
                     'class_tr' => 'table-light',
                     'tds' => array(
                         "pp"        => 1,
-                        "id"        => $id_group,
+                        "id"        => $item['id'],
                         "period"    => date("d.m.Y", $item['dt_start']).'-'.date("d.m.Y", $item['dt_end']),
-                        "groupName" => $item['name'],
+                        "groupName" => '<a href="/group?id='.$item['id'].'">'.$item['name'].'</a>',
                         "daysWeak"  => trim($strDay, ", "),
                         "maxUsers"  => $item['max_user'],
-                        "teachers"  => $id_group,
+                        "teachers"  => $item['id'],
                         "action"    => 'Нет данных'
                     )
                 );
