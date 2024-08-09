@@ -35,6 +35,7 @@ class StringsCreateTables
             "(`id` INT NOT NULL AUTO_INCREMENT , ".
             "`status` INT(1) NOT NULL DEFAULT '0' , ".
             "`dt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , ".
+            "`dt_ext` INT NOT NULL DEFAULT '0' , ".
             "`id_group` INT NULL , ".
             "`price` FLOAT NULL DEFAULT '0' , ".
             "`fee` FLOAT NULL DEFAULT '0' , ".

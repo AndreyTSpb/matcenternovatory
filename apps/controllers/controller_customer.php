@@ -23,7 +23,6 @@ class Controller_Customer extends Controller
         $data['content']    = $this->model->get_data();
 
         $this->view->generate('groups_view.php', 'page.php', $data);
-        exit("tyt");
     }
 
     public function action_edit($params){

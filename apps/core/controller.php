@@ -26,6 +26,7 @@ class Controller {
         $this->data['labelCompany'] = $this->model->labelCompany;
         $this->data['menu']         = Class_Admin_Menu::getArr();
         $this->data['url']          = $this->url;
+        $this->data['view_menu_file'] = 'super_admin_menu.php';
 
         //Проверка заполнены ли куки и соответствуют ли они регистрационным данным
         $objChek = new Class_ChekPass();
