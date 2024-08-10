@@ -3,7 +3,7 @@
 <div class="row">
     <div class="col-8  m-auto">
         <div class="card">
-            <h5 class="card-header text-bg-dark">Редактирование преподавателя</h5>
+            <h5 class="card-header text-bg-dark">Счет</h5>
             <div class="card-body">
                 <form class="g-3" method="post" action="<?=$url?>/save">
                     <div class="row">
@@ -92,13 +92,16 @@
                         <a href="<?=(empty($_SERVER['HTTP_REFERER']))?'/bills':$_SERVER['HTTP_REFERER'];?>" class="btn btn-primary mb-3">Назад</a>
 
                         <?php if(isset($id_bill) AND !empty($id_bill)):?>
+
                             <input type="hidden" name="id_bill" value="<?=$id_bill;?>">
-                            <?php if($del == 0):?>
+                            <?php if($del == 0 AND $send_status == 0):?>
                                 <button type="submit" class="btn btn-danger mb-3" name="del_bill">Удалить</button>
                             <?php endif;?>
-                            <?php if($send_status == 0):?>
+                            <?php if(empty($send_status)):?>
                                 <button type="submit" class="btn btn-info mb-3" name="send_bill">Отправить</button>
                             <?php endif;?>
+                        <?php else:?>
+                            <button type="submit" class="btn btn-success mb-3" name="save_invoice">Сохранить</button>
                         <?php endif;?>
                     </div>
                 </form>

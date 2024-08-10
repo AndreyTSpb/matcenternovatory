@@ -66,7 +66,7 @@ class Controller_Bill extends Controller
          * Отправляем счет на оплату
          */
         if(isset($_POST['send_bill'])){
-            if(!$this->model->sendBill()){
+            if(!$this->model->sendBill($_POST)){
                 header('Location: /bill?id='.$this->model->id_bill);
                 exit();
             }

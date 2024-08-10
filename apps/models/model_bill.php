@@ -7,8 +7,9 @@ class Model_Bill extends Model
 
     public function get_data($posts = false)
     {
-        $data['url'] = '/bill';
+        $data = array();
         $billInfo['title'] = 'Новый счет';
+        $data['send_status'] = 0;
         if(!empty($this->id_bill)){
             $bill = $this->getBillInfo();
             $data = $bill;
@@ -16,6 +17,7 @@ class Model_Bill extends Model
 
         }
 
+        $data['url'] = '/bill';
         $billInfo['content'] = Class_Get_Buffer::returnBuffer($data, 'forms/bill_form_view.php');
         return $billInfo;
     }
@@ -135,8 +137,93 @@ class Model_Bill extends Model
     /**
      * тправка счета клиенту
      */
-    public function sendBill()
+    public function sendBill($posts)
     {
+        /**
+         * Array (
+         *  [name] => Петр Петрович Петров
+         *  [id_cust] => 2
+         *  [phone] => 77778885599
+         *  [email] => ppp@mail.mail
+         *  [group] => Group-1
+         *  [id_group] => 2
+         *  [price] => 21
+         *  [fee] => 0
+         *  [dtExt] => 2024-08-09
+         *  [dtCreate] => 2024-08-09
+         *  [dtPay] => 1970-01-01
+         *  [transactionId] => 0
+         *  [note] => test 1
+         *  [id_bill] => 1
+         *  [send_bill] =>
+         * )
+         */
+        $objTBank = new Class_T_Bank_API();
 
+        $dtExt = strtotime($posts['dtExt']);
+        if($dtExt < time()) $dtExt = time()+3*24*60*60;
+
+        /**
+         * Вернет в случае успеха {
+         *  "pdfUrl":"https://example.com/qwetq",
+         *  "invoiceId":"d8327c28-4a8e-4084-93ea-a94b7bd144c5"
+         * }
+         * Error -
+         * Array (
+         *      [errorId] => 455098efb4
+         *      [errorMessage] => Ваш запрос невалиден: Invalid value for: body
+         *      [errorCode] => INVALID_DATA
+         *      [errorDetails] => Array (
+         *          [Ошибка декодирования] => Illegal json at '[ROOT].items[0].price': Expected number value but found: StringValueToken
+         *      )
+         * )
+         */
+        $rez = $objTBank->sendInvoiceToCustomer(
+            $posts['id_bill'],
+            strtotime($posts['dtCreate']),
+            $dtExt,
+            array("name"=>$posts['name']),
+            array(
+                "email"=>$posts['email'],
+                "phone"=>$posts['phone']
+            ),
+            array(
+                ["name"=>"Оплата занятий в группе: ".$posts['group'], "price"=>(float)$posts['price']]
+            ),
+            $posts['note']
+        );
+
+        $rez_arr = json_decode($rez, true);
+        if(array_key_exists('errorMessage', $rez_arr)){
+            Class_Alert_Message::error(
+                '<ul>'.
+                          '<li>Сервер Т-Банка вернул ошибку</li>'.
+                          '<li>errorId: '.$rez_arr['errorId'].'</li>'.
+                          '<li>errorMessage: '.$rez_arr['errorMessage'].'</li>'.
+                          '<li>errorCode: '.$rez_arr['errorCode'].'</li>'.
+                          '<li>errorDetails: '.$rez_arr['errorDetails']['Ошибка декодирования'].'</li>'.
+                      '</ul>'
+            );
+            return false;
+        }
+
+        /**
+         * Записать адрес чека и транзакцию в системе
+         */
+        $objOrder  = new Model_Orders(array("where"=>"id = " . (int)$posts['id_bill']));
+        if(!$objOrder->fetchOne()){
+            Class_Alert_Message::error('НЕ найден счет чтобы внести внего ответ с сбанка');
+            return false;
+        }
+        $objOrder->transaction_id = $rez_arr['invoiceId'];
+        $objOrder->pdf_url  =   $rez_arr['pdfUrl'];
+        //$objOrder->dt_pay   =   time();
+        $objOrder->send     =   1;
+        if(!$objOrder->update()) {
+            Class_Alert_Message::error('Счет не обновлен');
+            return false;
+        }
+        Class_Alert_Message::succes('Счет отправлен');
+        return true;
     }
 }

@@ -136,7 +136,6 @@ class Class_T_Bank_API
         );
         if(array_key_exists('phone', $contacts) AND !empty($contacts['phone'])) $data['contactPhone'] = '+'.$contacts['phone'];
         $json = $this->createJson($data);
-        echo $json;
         return $this->createCurl($url,'POST',$header, $json);
     }
 
