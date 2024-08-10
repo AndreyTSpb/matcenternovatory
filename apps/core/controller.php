@@ -30,16 +30,16 @@ class Controller {
 
         //Проверка заполнены ли куки и соответствуют ли они регистрационным данным
         $objChek = new Class_ChekPass();
-        if(!$objChek->checkCookie($_COOKIE['id_user'], $_COOKIE['session_id'])){
+
+
+        if(!isset($_COOKIE['id_user']) OR !isset($_COOKIE['session_id']) OR !$objChek->checkCookie($_COOKIE['id_user'], $_COOKIE['session_id'])){
             $url = $_SERVER['REQUEST_URI'];
             //Если это не страница авторизации переводим на нее
             if($url !== "/login"){
                 header("Location: /login");
                 exit();
             }
-
         }
-
 
         $this->view = new View();
         if(!empty($_COOKIE['id_user'])) $this->model->id_user = (int)$_COOKIE['id_user'];

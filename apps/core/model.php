@@ -33,8 +33,10 @@ class Model
         $obj = new Model_Options(array("where"=>"del = 0"));
         $rows = $obj->getAllRows();
         $options = array();
-        foreach ($rows AS $row){
-            $options[$row['name']] = $row['value'];
+        if($obj->num_row) {
+            foreach ($rows AS $row) {
+                $options[$row['name']] = $row['value'];
+            }
         }
         return $options;
     }
