@@ -13,7 +13,7 @@ class Class_Admin_Menu
             'Группы' => "groups",
             'Преподы' => "teachers",
             'Учетки' => "users",
-            "Настройки" => "setting"
+            "Настройки" => "settings"
         );
     }
 }

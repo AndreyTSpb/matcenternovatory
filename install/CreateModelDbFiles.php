@@ -21,7 +21,7 @@ class CreateModelDbFiles{
         $this->tableName = strtolower($tableName);
         $this->link = $link;
         $this->arrFields = $arrFields;
-        $this->fileName =   "Model_".ucfirst($this->tableName).".php";
+        $this->fileName =   "model_".$this->tableName.".php";
         $this->createFile();
     }
 

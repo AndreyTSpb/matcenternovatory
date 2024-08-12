@@ -34,13 +34,15 @@ class StringsCreateTables
         return "CREATE TABLE `orders` ".
             "(`id` INT NOT NULL AUTO_INCREMENT , ".
             "`status` INT(1) NOT NULL DEFAULT '0' , ".
+            "`send` INT(1) NOT NULL DEFAULT '0' , ".
             "`dt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , ".
             "`dt_ext` INT NOT NULL DEFAULT '0' , ".
             "`id_group` INT NULL , ".
             "`price` FLOAT NULL DEFAULT '0' , ".
             "`fee` FLOAT NULL DEFAULT '0' , ".
             "`dt_pay` INT NOT NULL DEFAULT '0' , ".
-            "`transaction_id` INT NOT NULL DEFAULT '0' , ".
+            "`transaction_id` TEXT NOT NULL , ".
+            "`pdf_url` TEXT NOT NULL , ".
             "`id_user` INT NOT NULL DEFAULT '0' , ".
             "`note` TEXT NOT NULL , PRIMARY KEY (`id`))".
             " ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_general_ci;";
