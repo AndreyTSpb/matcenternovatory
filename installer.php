@@ -9,6 +9,7 @@
     include $folderInstall."/class_connect_db.php";
     include $folderInstall ."/StringsCreateTables.php";
     include $folderInstall ."/CreateModelDbFiles.php";
+    include 'apps/classes/class_generator_token.php';
 
     if(isset($_POST['SEND_CONNECT'])) {
 
@@ -54,6 +55,7 @@
         $objConDb->link->query($objStringDb->createTableOrders());
         $objConDb->link->query($objStringDb->createTableTeachers());
         $objConDb->link->query($objStringDb->createTableTeachersForGroups());
+        $objConDb->link->query($objStringDb->createTableOptions());
 
 
         $rez = $objConDb->link->query("SHOW TABLES FROM " . $dbName . ";");
@@ -89,6 +91,11 @@
         include "apps/core/db.php";
         $objConDb = new install\connect_db\Class_Connect_DB(DB_HOST, DB_USER, DB_PASS, DB_NAME);
         //$rez = $objConDb->link->query("INSERT INTO `users` (`id`, `name`, `email`, `pass`, `del`) VALUES (NULL, 'Administrator', '".$_POST["login"]."', '".md5($pass)."', '0');");
+
+        //$salt = Class_Generator_Token::generator();
+
+        //$objConDb->link->query("INSERT INTO options (id, `name`, `value`) VALUES (NULL, 'salt', '".$salt."') ");
+
         $objConDb->link->query("INSERT INTO `users` (`id`, `name`, `email`, `pass`, `del`) VALUES (NULL, 'Administrator', '".$_POST["login"]."', '".md5($_POST["password1"])."', '0');");
         header("Location: /installer.php");
         exit();

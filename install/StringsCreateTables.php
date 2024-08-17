@@ -73,6 +73,7 @@ class StringsCreateTables
         return "CREATE TABLE `users` ".
                     "(`id` INT NOT NULL AUTO_INCREMENT , ".
                     "`name` VARCHAR(255) NOT NULL , ".
+                    "`role` INT(1) NOT NULL DEFAULT '1'".
                     "`email` VARCHAR(255) NOT NULL , ".
                     "`pass` VARCHAR(255) NOT NULL , ".
                     "`session_id` VARCHAR(255) NOT NULL , ".

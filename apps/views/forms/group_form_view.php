@@ -25,7 +25,7 @@
                         <label class="form-label">Дни недели:</label>
                         <?php $arrDay = array('Пн',"Вт","Ср","Чт","Пт","Сб","Вс"); $arrEngDay = array('mon',"tue","wed","thu","fri","sat","sun"); for ($i = 0; $i < 7; $i++):?>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" <?=($groupInfo['days'][$i])?'checked':'';?> value="<?=$arrEngDay[$i];?>" name="weak[]>
+                                <input class="form-check-input" type="checkbox" <?=(isset($groupInfo['days']) AND $groupInfo['days'][$i])?'checked':'';?> value="<?=$arrEngDay[$i];?>" name="weak[]>
                                 <label class="form-check-label" for="inlineCheckbox1"><?=$arrDay[$i];?></label>
                             </div>
                         <?php endfor;?>
@@ -40,7 +40,10 @@
                     </div>
                     <div class="col-md-6">
                         <label for="inputState" class="form-label">Преподаватели:</label>
-                        <?php $sel = new Class_DropList_Teachers(); echo $sel->html;?>
+                        <?php
+                            $sel = new Class_DropList_Teachers();
+                            echo $sel->html;
+                        ?>
                     </div>
                     <div class="mb-3">
                         <label for="exampleFormControlTextarea1" class="form-label">Примечание: </label>

@@ -7,7 +7,7 @@ class Model_Customer extends Model
 
     function get_data(){
         $data['url'] = '/customer';
-        return Class_Get_Buffer::returnBuffer($data, 'forms/customer_form_view.php');
+        return Class_Get_Buffer::returnBuffer( 'forms/customer_form_view.php', $data);
     }
 
     public function addCustomer($posts)
@@ -51,7 +51,7 @@ class Model_Customer extends Model
             "phone" => $obj->phone,
             "del"   => $obj->del
         );
-        $formInfo['content'] = Class_Get_Buffer::returnBuffer($data, 'forms/customer_form_view.php');
+        $formInfo['content'] = Class_Get_Buffer::returnBuffer('forms/customer_form_view.php', $data);
         return $formInfo;
     }
 

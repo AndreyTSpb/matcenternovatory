@@ -230,11 +230,12 @@ class Mysql {
             if(!empty($r->num_rows)) $this->num_row = $r->num_rows; //echo "<p>";
             if($r) $m = $r->fetch_all(3); //MYSQLI_BOTH
             else $m = FALSE;
+            return $m;
         } catch (Exception $e) {
-//            echo 'Error: '.$e->getMessage();
-//            exit;
+            echo 'Error: '.$e->getMessage();
+            exit;
         }
-        return $m;
+
     }
     /**
      * Показать результат

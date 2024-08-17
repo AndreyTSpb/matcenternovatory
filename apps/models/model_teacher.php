@@ -21,7 +21,7 @@ class Model_Teacher extends Model
     {
         $data['url'] = "/teacher";
         //
-        $formTeachInfo = Class_Get_Buffer::returnBuffer($data, 'forms/teacher_form_view.php');
+        $formTeachInfo = Class_Get_Buffer::returnBuffer('forms/teacher_form_view.php', $data);
         return $formTeachInfo;
     }
 
@@ -63,7 +63,7 @@ class Model_Teacher extends Model
             "note" => $row['note'],
             "del"   => $row['del']
         );
-        $formTeachInfo['content'] = Class_Get_Buffer::returnBuffer($data, 'forms/teacher_form_view.php');
+        $formTeachInfo['content'] = Class_Get_Buffer::returnBuffer('forms/teacher_form_view.php', $data);
         return $formTeachInfo;
     }
 
@@ -76,7 +76,7 @@ class Model_Teacher extends Model
      * Информация о преподе
      */
     function get_info(){
-        $formTeachInfo = Class_Get_Buffer::returnBuffer($data, 'forms/teacher_info_view.php');
+        $formTeachInfo = Class_Get_Buffer::returnBuffer('forms/teacher_info_view.php');
         return $formTeachInfo;
     }
 

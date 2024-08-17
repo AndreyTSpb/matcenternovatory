@@ -2,7 +2,7 @@
 ?>
 <main class="form-signin text-center">
     <form method="post" action="/login">
-        <img class="mb-4" src="/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
+        <img class="mb-4" src="<?=DOCUMENT_STATIC?>/images/math.png" alt="" width="72" height="57">
         <h1 class="h3 mb-3 fw-normal">Вход в систему</h1>
 
         <div class="form-floating">

@@ -47,7 +47,7 @@ class Class_T_Bank_API
         global $link;
         $this->DB_connect = $link;
         //SandBox Test On
-        $this->testQuery = true;
+        $this->testQuery = false;
         $this->setOptionsOrganization();
     }
 
@@ -55,11 +55,28 @@ class Class_T_Bank_API
      * Настройки организации отправителя
      */
     private function setOptionsOrganization(){
-        $this->bearer = 'Bearer TinkoffOpenApiSandboxSecretToken';
-        $this->innOrg = '691643439640';
-        $this->kppOrg = '0';
-        $this->nameOrg = 'ИП Егорова Н.Ф.';
-        $this->accountNumber = '40702810110011000000';
+        $r = $this->DB_connect->query("SELECT * FROM options");
+        $arr = array();
+        while ($m = $r->fetch_assoc()){
+            $arr[$m['name']] = $m['value'];
+        }
+        /**Array (
+         *  [nameCompany] => Математический Центр
+         *  [salt] => edcfr56g!jhd3
+         *  [accountNumber] => 40702810110011000000
+         *  [token] => TinkoffOpenApiSandboxSecretToken
+         *  [name] => ИП Егорова Н.Ф.
+         *  [inn] => 691643439640
+         *  [kpp] =>
+         * )
+         */
+
+        $token = (array_key_exists('token', $arr))?$arr['token']:0;
+        $this->bearer = 'Bearer '.$token;
+        $this->innOrg = (array_key_exists('inn', $arr))?$arr['inn']:0;
+        $this->kppOrg = (array_key_exists('kpp', $arr))?$arr['kpp']:0;
+        $this->nameOrg = (array_key_exists('name', $arr))?$arr['name']:0;
+        $this->accountNumber = (array_key_exists('accountNumber', $arr))?$arr['accountNumber']:0;
     }
 
     /**
@@ -71,10 +88,9 @@ class Class_T_Bank_API
         //"invoiceId":"d8327c28-4a8e-4084-93ea-a94b7bd144c5"
         //https://business.tbank.ru/openapi/sandbox/api/v1/openapi/invoice/{invoiceId}/info
         $url =($this->testQuery)?$this->testUrlAPI.'openapi/invoice/'.$invoiceId.'/info' : $this->UrlAPI.'openapi/invoice/'.$invoiceId.'/info';
-        echo $url;
         $header = array(
-            'Accept'=>'application/json',
-            'Authorization' => $this->bearer
+            'Accept: application/json',
+            'Authorization: '.$this->bearer
         );
         return $this->createCurl($url, 'GET', $header);
     }
@@ -94,7 +110,7 @@ class Class_T_Bank_API
      * @param float $amount - Количество единиц.
      * @return array
      */
-    private function itemInvoice($name, $price, $unit = 'шт', $vat = 'None', $amount){
+    private function itemInvoice($name, $price, $amount, $unit = 'шт', $vat = 'None'){
         return array(
             "name"      => $name,
             "price"     => $price,
@@ -145,10 +161,10 @@ class Class_T_Bank_API
         foreach ($arr_items AS $item){
             if (array_key_exists('name', $item)) $name = $item['name']; else $name = "NaN";
             if (array_key_exists('price', $item)) $price = $item['price']; else $price = 0;
-            if (array_key_exists('unit', $item)) $unit = $item['unit']; else $unit = '';
+            if (array_key_exists('unit', $item)) $unit = $item['unit']; else $unit = 'шт';
             if (array_key_exists('vat', $item)) $vat = $item['vat']; else $vat = 'None';
             if (array_key_exists('amount', $item)) $amount = $item['amount']; else $amount = 1;
-            $arr[] = $this->itemInvoice($name, $price, $unit, $vat, $amount);
+            $arr[] = $this->itemInvoice($name, $price, $amount, $unit, $vat);
         }
         return $arr;
     }

@@ -11,7 +11,7 @@
         <div class="card">
             <h5 class="card-header text-bg-dark">Настройки для банка</h5>
             <div class="card-body">
-                <form class="g-3" method="post" action="<?=$url?>/tbank_option">
+                <form class="g-3" method="post" action="<?=$url?>/save_tbank_options">
                     <div class="row">
                         <div class="col-auto">
                             <label for="accountNumber" class="form-label">accountNumber:</label>
@@ -38,10 +38,12 @@
                     </div>
 
                     <div class="col-auto">
-                        <a href="<?=(empty($_SERVER['HTTP_REFERER']))?'/bills':$_SERVER['HTTP_REFERER'];?>" class="btn btn-primary mb-3">Назад</a>
-                        <button type="submit" class="btn btn-success mb-3" name="save_invoice">Сохранить</button>
+                        <button type="submit" class="btn btn-success mb-3" name="save_tbank">Сохранить</button>
                     </div>
                 </form>
+            </div>
+            <div class="card-footer">
+                <a href="<?=(empty($_SERVER['HTTP_REFERER']))?'/bills':$_SERVER['HTTP_REFERER'];?>" class="btn btn-primary mb-3">Назад</a>
             </div>
         </div>
     </div>

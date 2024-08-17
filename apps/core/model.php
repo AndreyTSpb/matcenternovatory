@@ -15,14 +15,15 @@ class Model
     public $role;
     public $nameCompany;
     public $labelCompany;
+    public $options;
 
     function __construct()
     {
         $this->role = 2;
-        $options = $this->getOptions();
+        $this->options = $this->getOptions();
 
-        $this->nameCompany = (!empty($options['nameCompany']))?$options['nameCompany']:'nameCompany';
-        $this->labelCompany = (!empty($options['labelCompany']))?$options['labelCompany']:'bootstrap-logo.svg';
+        $this->nameCompany = (!empty($this->options['nameCompany']))?$this->options['nameCompany']:'nameCompany';
+        $this->labelCompany = (!empty($this->options['labelCompany']))?$this->options['labelCompany']:'bootstrap-logo.svg';
     }
 
     /**
@@ -60,8 +61,9 @@ class Model
      */
     function getActionButtons(){
         return array(
-            "Выставить счет" => "bill/add",
+            "Выставить счет"   => "bill/add",
             "Добавить клиента" => "customer/add",
+            "Добавить группу"  => "group/add",
             "Добавить препода" => "teacher/add"
         );
     }

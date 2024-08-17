@@ -1,13 +1,12 @@
 <?php
 
 
-class Controller_Bills extends Controller
+class Controller_Users extends Controller
 {
     public function __construct()
     {
         parent::__construct();
-        $this->model = new Model_Bills();
-        $this->model->testStatusBills();
+        $this->model = new Model_All_Users();
     }
 
     public function action_index(){
@@ -25,5 +24,4 @@ class Controller_Bills extends Controller
 
         $this->view->generate('groups_view.php', 'page.php', $data);
     }
-
 }

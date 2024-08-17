@@ -7,7 +7,7 @@
 
 class Class_Get_Buffer
 {
-    static function returnBuffer($data = false, $path){
+    static function returnBuffer($path, $data = false){
 //        if(empty($data)){
 //            return '<div class="alert alert-danger" role="alert">
 //                      нет данных в переменной $data

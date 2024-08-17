@@ -5,6 +5,11 @@
         <div class="card">
             <h5 class="card-header text-bg-dark">Счет</h5>
             <div class="card-body">
+                <?php if(isset($id_bill) AND !empty($id_bill)):?>
+                    <form id="test_form" method="post" action="<?=$url?>/test_bill">
+                        <input type="hidden" name="id_bill" value="<?=$id_bill?>">
+                    </form>
+                <?php endif;?>
                 <form class="g-3" method="post" action="<?=$url?>/save">
                     <div class="row">
                         <div class="col-md-6">
@@ -76,10 +81,14 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-4 <?=(isset($id_bill) AND !empty($id_bill))?'':'d-none';?>">
+                    <div class="row  <?=(isset($id_bill) AND !empty($id_bill))?'':'d-none';?>">
+                        <div class="col-md-4">
                             <label for="transactionId" class="form-label">Номер транзакции:</label>
                             <input type="text" class="form-control" id="transactionId" name="transactionId" value="<?=(isset($transactionId))?$transactionId:''?>">
+                        </div>
+                        <div class="col-md-4">
+                            <p></p>
+                            <p><a href="<?=(isset($pdfUrl))?$pdfUrl:'#'?>">Ссылка на счет</a></p>
                         </div>
                     </div>
 
@@ -99,6 +108,8 @@
                             <?php endif;?>
                             <?php if(empty($send_status)):?>
                                 <button type="submit" class="btn btn-info mb-3" name="send_bill">Отправить</button>
+                            <?php else:?>
+                                <button form="test_form" type="submit" class="btn btn-info mb-3" name="send">Проверить</button>
                             <?php endif;?>
                         <?php else:?>
                             <button type="submit" class="btn btn-success mb-3" name="save_invoice">Сохранить</button>

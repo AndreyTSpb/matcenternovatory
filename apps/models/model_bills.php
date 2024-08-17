@@ -79,4 +79,26 @@ class Model_Bills extends Model
         }
         return $arr;
     }
+
+    /**
+     * Проверка статуса счетов
+     */
+    public function testStatusBills(){
+        //Ограничение — 20 запросов в секунду а проверку статуса
+        $objBills = new Model_Orders(['where'=>"send = 1 AND status = 0", "limit"=>20]);
+        if(!$objBills->num_row) return false;
+        $rows = $objBills->getAllRows();
+        $kol = 0;
+        foreach ($rows AS $row){
+            $obj = new Class_T_Bank_API();
+            $rez_arr = json_decode($obj->getInfoInvoice($row['transaction_id']), true);
+            if(array_key_exists('status', $rez_arr)){
+                if($rez_arr['status'] == 'EXECUTED'){
+                    Class_Bill_Status_Update::update($row['id'], 1);
+                    $kol++;
+                }
+            }
+        }
+        Class_Alert_Message::succes("На текущий момент оплачено - " .$kol. " счетов");
+    }
 }

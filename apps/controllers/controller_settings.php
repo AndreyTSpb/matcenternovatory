@@ -33,17 +33,31 @@ class Controller_Settings extends Controller
     }
 
     public function action_save_general_option(){
-        print_r($_POST);
-        exit;
+        ///Array ( [nameCompany] => fsdf [save_nameCompany] => )
+        if(isset($_POST['save_nameCompany'])){
+            print_r($_POST['nameCompany']);
+            $this->model->saveOptions('nameCompany', $_POST['nameCompany']);
+        }
+        header("Location: /settings");
+        exit();
     }
 
-    public function action_save_salt_option(){
-        print_r($_POST);
-        exit;
+    public function action_save_salt(){
+        //Array ( [salt] => fdsfdsgfgfsdg [save_salt] => )
+        $this->model->saveOptions('salt', $_POST['salt']);
+        header("Location: /settings");
+        exit();
     }
 
-    public function action_save_tbank_option(){
-        print_r($_POST);
-        exit;
+    public function action_save_tbank_options(){
+        //Array ( [accountNumber] => 325435435436 [token] => 54365463546 [name] => 65765765 [inn] => 7576 [kpp] => 657657 [save_tbank] => )
+        if(isset($_POST['save_tbank'])){
+            array_pop($_POST);
+            foreach ($_POST AS $key => $value)
+                $this->model->saveOptions($key, $value);
+        }
+
+        header("Location: /settings");
+        exit();
     }
 }

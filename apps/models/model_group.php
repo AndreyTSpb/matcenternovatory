@@ -27,7 +27,7 @@ class Model_Group extends Model
         if(!empty($this->id_group)){
             $data['groupInfo'] = $this->groupInfo();
         }
-        return Class_Get_Buffer::returnBuffer($data, 'forms/group_form_view.php');
+        return Class_Get_Buffer::returnBuffer('forms/group_form_view.php', $data);
     }
 
     /**
@@ -130,7 +130,7 @@ class Model_Group extends Model
          * Данные о группе
          */
         $data['groupInfo'] = $this->groupInfo();
-        return Class_Get_Buffer::returnBuffer($data, 'forms/group_info_view.php');
+        return Class_Get_Buffer::returnBuffer('forms/group_info_view.php', $data);
     }
 
     private function groupInfo(){

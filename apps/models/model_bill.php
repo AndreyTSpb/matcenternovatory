@@ -18,7 +18,7 @@ class Model_Bill extends Model
         }
 
         $data['url'] = '/bill';
-        $billInfo['content'] = Class_Get_Buffer::returnBuffer($data, 'forms/bill_form_view.php');
+        $billInfo['content'] = Class_Get_Buffer::returnBuffer('forms/bill_form_view.php', $data);
         return $billInfo;
     }
 
@@ -45,7 +45,7 @@ class Model_Bill extends Model
 
         switch ($obj->send){
             case 0:
-                $status_send = "<span class='text-danger'>Не Отправлен</span>";
+                $status = $status_send = "<span class='text-danger'>Не Отправлен</span>";
                 break;
             case 1:
                 $status_send = "<span class='text-success'>Отправлен</span>";
@@ -75,6 +75,7 @@ class Model_Bill extends Model
             'dtCreate'        => date("Y-m-d", strtotime($obj->dt)),
             'dtExt'    => date("Y-m-d", $obj->dt_ext),
             'transactionId' => $obj->transaction_id,
+            'pdfUrl'        => $obj->pdf_url,
             'note'          => $obj->note
         );
     }
@@ -226,4 +227,6 @@ class Model_Bill extends Model
         Class_Alert_Message::succes('Счет отправлен');
         return true;
     }
+
+
 }

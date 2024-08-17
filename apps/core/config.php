@@ -17,7 +17,12 @@ define('SITE_PATH', $sitePath);/*Путь ккорневой папке*/
 define('TP_FOLDER', 'tp'); //Папка для шаблонов
 
 /*Урл сайта полный для header-location*/
-$protocol = (!empty($_SERVER['HTTPS']) && 'off' !== strtolower($_SERVER['HTTPS'])?"https://":"http://");
+$protocol = (!empty($_SERVER['HTTP_HTTPS']) && 'off' !== strtolower($_SERVER['HTTP_HTTPS']) || $_SERVER['SERVER_PORT'] == 443?"https://":"http://");
+//$protocol = (!empty($_SERVER['HTTPS']) && 'off' !== strtolower($_SERVER['HTTPS'])?"https://":"http://");
+//print_r($_SERVER);
+//echo $_SERVER['SERVER_NAME'];
+//print_r($protocol);
+//exit;
 $host  = $_SERVER['HTTP_HOST'];
 $uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
 define('DOCUMENT_ROOT',$protocol.$host.$uri);

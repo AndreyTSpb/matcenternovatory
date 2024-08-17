@@ -83,4 +83,54 @@ class Controller_Bill extends Controller
         header("Location: /bills");
         exit;
     }
+
+    /**
+     * Проверка счета на оплату
+     * @return bool
+     */
+    public function action_test_bill(){
+        /**
+         * Array ( [id_bill] => 3 [send] => )
+         */
+        if(isset($_POST['send']) AND isset($_POST['id_bill']) AND !empty($_POST['id_bill'])){
+
+            $objOrder = new Model_Orders(array("where" => "id = ".(int)$_POST['id_bill']));
+            $objOrder->fetchOne();
+            $obj = new Class_T_Bank_API();
+            $ivoiseInfo = $obj->getInfoInvoice($objOrder->transaction_id);
+            $rez_arr = json_decode($ivoiseInfo, true);
+            print_r($rez_arr);
+            exit;
+            if(array_key_exists('errorMessage', $rez_arr)){
+                Class_Alert_Message::error(
+                    '<ul>'.
+                    '<li>Сервер Т-Банка вернул ошибку</li>'.
+                    '<li>errorId: '.$rez_arr['errorId'].'</li>'.
+                    '<li>errorMessage: '.$rez_arr['errorMessage'].'</li>'.
+                    '<li>errorCode: '.$rez_arr['errorCode'].'</li>'.
+                    '<li>errorDetails: '.$rez_arr['errorDetails']['Ошибка декодирования'].'</li>'.
+                    '</ul>'
+                );
+                return false;
+            }
+            if(array_key_exists('status', $rez_arr)){
+                switch($rez_arr['status']){
+                    case 'SUBMITTED':
+                        $text = "<strong>Счет отправлен, но не оплачен</strong>";
+                        break;
+                    case 'EXECUTED':
+                        $text = "<strong>Счет оплачен</strong>";
+                        Class_Bill_Status_Update::update($_POST['id_bill'], 1);
+                        break;
+                    default:
+                        $text = "<strong>Черновик</strong>";
+                }
+                Class_Alert_Message::succes($text);
+            }
+            header("Location: /bill?id=".(int)$_POST['id_bill']);
+            exit();
+        }
+        header("Location: /bills");
+        exit();
+    }
 }

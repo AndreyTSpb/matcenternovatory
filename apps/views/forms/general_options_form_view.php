@@ -20,9 +20,7 @@
                         </div>
                     </div>
                     <div class="col-auto">
-                        <a href="<?=(empty($_SERVER['HTTP_REFERER']))?'/bills':$_SERVER['HTTP_REFERER'];?>" class="btn btn-primary mb-3">Назад</a>
-
-                        <button type="submit" class="btn btn-success mb-3" name="save_invoice">Сохранить</button>
+                        <button type="submit" class="btn btn-success mb-3" name="save_nameCompany">Сохранить</button>
                     </div>
                 </form>
 
@@ -34,8 +32,7 @@
                         </div>
                     </div>
                     <div class="col-auto">
-                        <a href="<?=(empty($_SERVER['HTTP_REFERER']))?'/bills':$_SERVER['HTTP_REFERER'];?>" class="btn btn-primary mb-3">Назад</a>
-                        <button type="submit" class="btn btn-success mb-3" name="save_invoice">Сохранить</button>
+                        <button type="submit" class="btn btn-success mb-3" name="save_salt">Сохранить</button>
                     </div>
                 </form>
             </div>
@@ -53,6 +50,9 @@
                         <div class="col-md-4">
                             <label for="labelCompany" class="form-label">labelCompany:</label>
                             <input type="file" class="form-control" id="labelCompany" name="labelCompany" value="<?=(isset($labelCompany))?$labelCompany:''?>">
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-success mb-3" name="save_label">Сохранить</button>
                         </div>
                     </div>
                 </form>
