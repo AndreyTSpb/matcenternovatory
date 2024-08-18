@@ -14,6 +14,11 @@ class Controller_T_API extends Controller
         //echo $tBank->sendInvoiceToCustomer('125486', time(),time()+24*60*60, array('name'=>"vasa pupkin"), array("email"=>"tynyanyi@mail.ru", "phone"=>"79991234567"),array(["name"=>"kurs", "price"=>1000.09]), 'Test invoice');
 
         //echo $tBank->getInfoInvoice("d8327c28-4a8e-4084-93ea-a94b7bd144c5");
+
+
+        $data['title']         = "T-Bank";
+        $this->view->generate('test_pay_view.php', 'page.php', $data);
+
         exit();
     }
 
