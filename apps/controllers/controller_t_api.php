@@ -15,6 +15,25 @@ class Controller_T_API extends Controller
 
         //echo $tBank->getInfoInvoice("d8327c28-4a8e-4084-93ea-a94b7bd144c5");
 
+        $items = array(
+            array("Name" => "Оплата абонемента в группе 1'", "Price" => 10000, "Quantity" => 1, "Amount" => 10000, "Tax" => "vat10")
+        );
+
+        $tBank = new Class_T_Bank_Api_Merch();
+        $tBank->createOrder('125486','Оплата абонемента в группе 1','10000','tynyanyi@mail.ru','79523752922', $items);
+        exit($tBank->sendOrder());
+        /**
+         * {
+         *      "Success":true,
+         *      "ErrorCode":"0",
+         *      "TerminalKey":"1723638759255DEMO",
+         *      "Status":"NEW",
+         *      "PaymentId":"4880886848",
+         *      "OrderId":"125486",
+         *      "Amount":10000,
+         *      "PaymentURL":"https://securepayments.tinkoff.ru/Q1YhvCya"
+         * }
+         */
 
         $data['title']         = "T-Bank";
         $this->view->generate('test_pay_view.php', 'page.php', $data);
