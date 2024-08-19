@@ -86,4 +86,20 @@ class Controller_Customer extends Controller
         header("Location: /customers");
         exit;
     }
+
+    public function action_get_cust_info(){
+        if(isset($_POST['get_cust'])){
+            $id = (int)$_POST['id_cust'];
+            if(!$id){
+                exit("no id");
+            }
+            $obj = new Model_Customers(['where'=>"id = ".$id]);
+            if(!$obj->fetchOne()) exit("No row id");
+            $arr = array(
+                "email" => $obj->email,
+                "phone" => $obj->phone
+            );
+            exit(json_encode($arr));
+        }
+    }
 }

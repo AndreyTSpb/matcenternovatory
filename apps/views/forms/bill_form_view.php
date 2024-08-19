@@ -2,7 +2,7 @@
 ?>
 <div class="row">
     <div class="col-8  m-auto">
-        <div class="card">
+        <div class="card" id="form_bill">
             <h5 class="card-header text-bg-dark">Счет</h5>
             <div class="card-body">
                 <?php if(isset($id_bill) AND !empty($id_bill)):?>

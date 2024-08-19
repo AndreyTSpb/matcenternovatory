@@ -135,4 +135,31 @@
         });
     }
 
+    /**
+     * Получение данных клиента и размещение в инпутах
+     */
+    let form_bill = document.getElementById('form_bill');
+    if(form_bill != null){
+        let selector = form_bill.querySelector("#customers"),
+            phone    = form_bill.querySelector('#phone'),
+            email    = form_bill.querySelector("#email");
+
+        selector.addEventListener("change", (e)=>{
+            console.log(e.target.value);
+            $.ajax({
+                url: '/customer/get_cust_info',
+                method: 'post',
+                dataType: 'html',
+                data: {get_cust: 'Текст', id_cust: e.target.value},
+                success: function(data){
+                    console.log(data);
+                    //{"email":"kotwler@mail.ru","phone":"79500239724"}
+                    let arr = JSON.parse(data);
+                    phone.value = arr.phone;
+                    email.value = arr.email;
+                }
+            });
+        });
+    }
+
 })();
