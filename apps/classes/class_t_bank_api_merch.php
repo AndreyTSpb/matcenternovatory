@@ -110,7 +110,7 @@ class Class_T_Bank_Api_Merch
         global $link;
         $this->DB_connect = $link;
         //SandBox Test On
-        $this->testQuery = true;
+        $this->testQuery =  false;
         $this->setOptionsOrganization();
     }
 
@@ -302,6 +302,47 @@ class Class_T_Bank_Api_Merch
     public function sendOrder(){
         return $this->createCurl(
             $this->UrlAPI."/v2/Init",
+            'POST',
+            array(
+                'Content-Type: application/json',
+                'Accept: application/json'
+            ),
+            $this->jsonTest
+        );
+    }
+
+    public function getQR($paymentId){
+        /**
+         * {
+         *  "TerminalKey": "TinkoffBankTest",
+         *  "PaymentId": 10063,
+         *  "DataType": "PAYLOAD",
+         *  "Token": "871199b37f207f0c4f721a37cdcc71dfcea880b4a4b85e3cf852c5dc1e99a8d6"
+         *  }
+         */
+        $arrToken = array(
+            "DataType" => "PAYLOAD",
+            "Password" => $this->terminalPass,
+            "PaymentId" => $paymentId,
+            "TerminalKey" => $this->terminalKey
+        );
+
+        $str = '';
+        foreach ($arrToken AS $item){
+            $str .= $item;
+        }
+
+        $query = array(
+            "TerminalKey" => $this->terminalKey,
+            "PaymentId" => $paymentId,
+            "DataType" => "PAYLOAD",
+            "Token" => hash('sha256', $str)
+        );
+
+        $this->jsonTest = $this->createJson($query);
+        //https://securepay.tinkoff.ru/v2/GetQr
+        return $this->createCurl(
+            $this->UrlAPI."/v2/GetQr",
             'POST',
             array(
                 'Content-Type: application/json',
