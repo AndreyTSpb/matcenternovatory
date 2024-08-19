@@ -6,37 +6,8 @@ class Controller_T_API extends Controller
     private $bearer = 'Bearer TinkoffOpenApiSandboxSecretToken';
 
     function action_index(){
-        //curl GET 'https://business.tbank.ru/openapi/sandbox/api/v1/statement?accountNumber=40702810110011000000&from=2024-04-26T21:00:00.000Z'
-        //-H 'Authorization: Bearer TinkoffOpenApiSandboxSecretToken'
-        //-H 'Content-Type: application/json'
 
-        //$tBank = new Class_T_Bank_API();
-        //echo $tBank->sendInvoiceToCustomer('125486', time(),time()+24*60*60, array('name'=>"vasa pupkin"), array("email"=>"tynyanyi@mail.ru", "phone"=>"79991234567"),array(["name"=>"kurs", "price"=>1000.09]), 'Test invoice');
-
-        //echo $tBank->getInfoInvoice("d8327c28-4a8e-4084-93ea-a94b7bd144c5");
-
-        $items = array(
-            array("Name" => "Оплата абонемента в группе 1'", "Price" => 10000, "Quantity" => 1, "Amount" => 10000, "Tax" => "vat10")
-        );
-
-        $tBank = new Class_T_Bank_Api_Merch();
-        $tBank->createOrder('125486','Оплата абонемента в группе 1','10000','tynyanyi@mail.ru','79523752922', $items);
-        exit($tBank->sendOrder());
-        /**
-         * {
-         *      "Success":true,
-         *      "ErrorCode":"0",
-         *      "TerminalKey":"1723638759255DEMO",
-         *      "Status":"NEW",
-         *      "PaymentId":"4880886848",
-         *      "OrderId":"125486",
-         *      "Amount":10000,
-         *      "PaymentURL":"https://securepayments.tinkoff.ru/Q1YhvCya"
-         * }
-         */
-
-        $data['title']         = "T-Bank";
-        $this->view->generate('test_pay_view.php', 'page.php', $data);
+        Class_Send_Mail::sendYandex('anarhia99@yandex.ru','Kykyryza99','tynyanyi@mail.ru','tynyanyi@mail.ru','Математический центр Новаторы','Ссылка на оплату занятий ');
 
         exit();
     }

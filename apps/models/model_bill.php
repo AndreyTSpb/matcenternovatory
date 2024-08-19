@@ -122,6 +122,12 @@ class Model_Bill extends Model
             Class_Alert_Message::error('Счет не создан');
             return false;
         }
+        /**
+         * Формируем ссылку на оплату
+         */
+        $group_name = Class_Get_Name_Group::name($posts['id_group']);
+
+        if(!$this->sendOrder($id_bill, (float)$posts['price'], $group_name, $posts['email'], $posts['phone'], strtotime($posts['dtExt']))) return false;
         Class_Alert_Message::succes('Счет создан');
         return $id_bill;
     }
@@ -132,6 +138,105 @@ class Model_Bill extends Model
         if($obj->status > 0 ) return false;
         $obj->status = 2;
         if(!$obj->update()) return false;
+        return true;
+    }
+
+    /**
+     * Запрос в Т-банк на создание счета на оплату
+     * @param $id_bill
+     * @param $amount
+     * @param $group_name
+     * @param $email
+     * @param $phone
+     * @param bool $dtExt
+     * @return bool
+     */
+    private function sendOrder($id_bill, $amount, $group_name, $email, $phone, $dtExt=false){
+        $objTBank = new Class_T_Bank_Api_Merch();
+
+        $dtExt = strtotime($dtExt);
+        if($dtExt < time()) $dtExt = time()+3*24*60*60;
+
+        $items = array(
+            array("Name" => "Оплата занятий в группе: ".$group_name, "Price" => (int)$amount*100, "Quantity" => 1, "Amount" => (int)$amount*100, "Tax" => "none")
+        );
+
+        /**
+         * Формирование JSON
+         */
+        $objTBank->createOrder(
+            $id_bill,
+            "Оплата занятий в группе: ".$group_name,
+            (int)$amount*100,
+            $email,
+            $phone,
+            $items
+        );
+
+        //exit($objTBank->jsonTest);
+
+        /**
+         * Отправляем данные для создания счеты
+         */
+        $rez = $objTBank->sendOrder();
+
+        //exit($rez);
+
+        $rez_arr = json_decode($rez, true);
+
+
+        if ($rez_arr['ErrorCode'] > 0 ){
+            /**
+             * Произошла ощибка
+             * {
+             *  "Success":false,
+             *  "ErrorCode":"501",
+             *  "Message":"Неверные параметры.",
+             *  "Details":"Терминал не найден."
+             * }
+             */
+            Class_Alert_Message::error(
+                '<ul>'.
+                '<li>Сервер Т-Банка вернул ошибку</li>'.
+                '<li>errorId: '.$rez_arr['ErrorCode'].'</li>'.
+                '<li>errorMessage: '.$rez_arr['Message'].'</li>'.
+                '<li>errorCode: '.$rez_arr['errorCode'].'</li>'.
+                '<li>errorDetails: '.$rez_arr['Details'].'</li>'.
+                '</ul>'
+            );
+            return false;
+        }
+
+        /**
+         * Вернет в случае успеха
+         * {
+         *  "Success":true,
+         *  "ErrorCode":"0",
+         *  "TerminalKey":"1723638759255DEMO",
+         *  "Status":"NEW",
+         *  "PaymentId":"4882322417",
+         *  "OrderId":"2",
+         *  "Amount":1200,
+         *  "PaymentURL":"https://securepayments.tinkoff.ru/WuzvAlyF"
+         * }
+         */
+
+        /**
+         * Записать адрес ссылки на оплату и транзакцию в системе
+         */
+        $objOrder  = new Model_Orders(array("where"=>"id = " . (int)$rez_arr['OrderId']));
+        if(!$objOrder->fetchOne()){
+            Class_Alert_Message::error('НЕ найден счет чтобы внести внего ответ с сбанка');
+            return false;
+        }
+        $objOrder->transaction_id = $rez_arr['PaymentId'];
+        $objOrder->pdf_url  =   $rez_arr['PaymentURL'];
+
+        $objOrder->send     =   0;
+        if(!$objOrder->update()) {
+            Class_Alert_Message::error('Счет не обновлен');
+            return false;
+        }
         return true;
     }
 
@@ -159,89 +264,37 @@ class Model_Bill extends Model
          *  [send_bill] =>
          * )
          */
-        $objTBank = new Class_T_Bank_Api_Merch();
-
-        $dtExt = strtotime($posts['dtExt']);
-        if($dtExt < time()) $dtExt = time()+3*24*60*60;
-
-        /**
-         * Вернет в случае успеха {
-         *   "Success": true,
-         *  "ErrorCode": "0",
-         *  "TerminalKey": "TinkoffBankTest",
-         *  "Status": "NEW",
-         *  "PaymentId": "3093639567",
-         *  "OrderId": "21090",
-         *  "Amount": 140000,
-         *  "PaymentURL": "https://securepay.tinkoff.ru/new/fU1ppgqa"
-         *  }
-         */
-
-        $items = array(
-            array("Name" => "Оплата занятий в группе: ".$posts['group'], "Price" => (int)$posts['price']*100, "Quantity" => 1, "Amount" => (int)$posts['price']*100, "Tax" => "none")
-        );
-
-        /**
-         * Формирование JSON
-         */
-        $objTBank->createOrder(
-            $posts['id_bill'],
-            "Оплата занятий в группе: ".$posts['group'],
-            (int)$posts['price']*100,
-            $posts['email'],
-            $posts['phone'],
-            $items);
-
-
-        /**
-         * Отправляем данные для создания счеты
-         */
-        $rez = $objTBank->sendOrder();
-
-        $rez_arr = json_decode($rez, true);
-
-        if ($rez_arr['ErrorCode'] > 0 ){
-            /**
-             * Произошла ощибка
-             */
-            Class_Alert_Message::error(
-                '<ul>'.
-                '<li>Сервер Т-Банка вернул ошибку</li>'.
-                '<li>errorId: '.$rez_arr['ErrorCode'].'</li>'.
-                '<li>errorMessage: '.$rez_arr['errorMessage'].'</li>'.
-                '<li>errorCode: '.$rez_arr['errorCode'].'</li>'.
-                '<li>errorDetails: '.$rez_arr['errorDetails']['Ошибка декодирования'].'</li>'.
-                '</ul>'
-            );
-            return false;
-        }
-
         /**
          * Записать адрес ссылки на оплату и транзакцию в системе
-         */
-        /**
-         *
-         *
-         *
-         *
-         *
-         *
-         *
-         *
-         *
-         *
-         *
-         *
-         *
          */
         $objOrder  = new Model_Orders(array("where"=>"id = " . (int)$posts['id_bill']));
         if(!$objOrder->fetchOne()){
             Class_Alert_Message::error('НЕ найден счет чтобы внести внего ответ с сбанка');
             return false;
         }
-        $objOrder->transaction_id = $rez_arr['invoiceId'];
-        $objOrder->pdf_url  =   $rez_arr['pdfUrl'];
-        //$objOrder->dt_pay   =   time();
+        $pay_url = $objOrder->pdf_url;
+        if(!$pay_url){
+            Class_Alert_Message::error('НЕ найден ссылка на оплату');
+            return false;
+        }
+
+        $objEmail = new Class_Get_Options_For_Email_Message();
+
+        //exit($objEmail->emailLogin);
+        /**
+         *  Отправка на почту
+         */
+        if(!Class_Send_Mail::sendYandex(
+            $objEmail->emailLogin,
+             $objEmail->passwordLogin,
+            $posts['email'],
+            $posts['name'],
+            $objEmail->titleMessage,
+            $objEmail->bodyMessage.' <a href="'.$pay_url.'">'.$pay_url.'</a>'.$objEmail->footerMessage)
+        ){
+            return false;
+        }
+
         $objOrder->send     =   1;
         if(!$objOrder->update()) {
             Class_Alert_Message::error('Счет не обновлен');

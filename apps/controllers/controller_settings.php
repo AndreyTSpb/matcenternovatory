@@ -60,4 +60,26 @@ class Controller_Settings extends Controller
         header("Location: /settings");
         exit();
     }
+
+    public function action_save_email_account(){
+
+        /**
+         * Array (
+         *  [emailLogin] => tynyanyi@mail.ru
+         *  [passwordLogin] => gfdgfdg
+         *  [titleMessage] => fdgfgfdsg
+         *  [bodyMessage] => sfdgsfgd
+         *  [footerMessage] => sfgfsdg
+         *  [save_email] =>
+         * )
+         */
+        if(isset($_POST['save_email'])){
+            array_pop($_POST); //ткидываем последний элемент
+            foreach ($_POST AS $key => $value)
+                $this->model->saveOptions($key, $value);
+        }
+
+        header("Location: /settings");
+        exit();
+    }
 }

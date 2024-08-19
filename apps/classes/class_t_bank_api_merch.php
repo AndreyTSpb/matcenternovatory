@@ -41,9 +41,9 @@ class Class_T_Bank_Api_Merch
     /**
      * @var bool - Тестовый платеж или нет
      */
-    private $testQuery = false;
+    private $testQuery;
 
-    private $UrlAPI = 'https://securepay.tinkoff.ru/v2/Init';
+    private $UrlAPI = 'https://securepay.tinkoff.ru';
     private $testUrlAPI = 'https://rest-api-test.tinkoff.ru/v2/Init';
 
 
@@ -110,7 +110,7 @@ class Class_T_Bank_Api_Merch
         global $link;
         $this->DB_connect = $link;
         //SandBox Test On
-        $this->testQuery = false;
+        $this->testQuery = true;
         $this->setOptionsOrganization();
     }
 
@@ -140,8 +140,16 @@ class Class_T_Bank_Api_Merch
         $this->kppOrg = (array_key_exists('kpp', $arr))?$arr['kpp']:0;
         $this->nameOrg = (array_key_exists('name', $arr))?$arr['name']:0;
         $this->accountNumber = (array_key_exists('accountNumber', $arr))?$arr['accountNumber']:0;
+
+
+
         $this->terminalKey = (array_key_exists('terminalKey', $arr))?$arr['terminalKey']:0;
         $this->terminalPass = (array_key_exists('terminalPass', $arr))?$arr['terminalPass']:0;
+        if($this->testQuery){
+            $this->terminalKey = (array_key_exists('terminalKeyDemo', $arr))?$arr['terminalKeyDemo']:0;
+            $this->terminalPass = (array_key_exists('terminalPassDemo', $arr))?$arr['terminalPassDemo']:0;
+        }
+
     }
 
     /**
@@ -292,7 +300,8 @@ class Class_T_Bank_Api_Merch
     }
 
     public function sendOrder(){
-        return $this->createCurl($this->UrlAPI,
+        return $this->createCurl(
+            $this->UrlAPI."/v2/Init",
             'POST',
             array(
                 'Content-Type: application/json',
