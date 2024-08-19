@@ -136,7 +136,7 @@ class Model_Bill extends Model
     }
 
     /**
-     * тправка счета клиенту
+     * Формирование счета и отправка счета клиенту
      */
     public function sendBill($posts)
     {
@@ -159,57 +159,80 @@ class Model_Bill extends Model
          *  [send_bill] =>
          * )
          */
-        $objTBank = new Class_T_Bank_API();
+        $objTBank = new Class_T_Bank_Api_Merch();
 
         $dtExt = strtotime($posts['dtExt']);
         if($dtExt < time()) $dtExt = time()+3*24*60*60;
 
         /**
          * Вернет в случае успеха {
-         *  "pdfUrl":"https://example.com/qwetq",
-         *  "invoiceId":"d8327c28-4a8e-4084-93ea-a94b7bd144c5"
-         * }
-         * Error -
-         * Array (
-         *      [errorId] => 455098efb4
-         *      [errorMessage] => Ваш запрос невалиден: Invalid value for: body
-         *      [errorCode] => INVALID_DATA
-         *      [errorDetails] => Array (
-         *          [Ошибка декодирования] => Illegal json at '[ROOT].items[0].price': Expected number value but found: StringValueToken
-         *      )
-         * )
+         *   "Success": true,
+         *  "ErrorCode": "0",
+         *  "TerminalKey": "TinkoffBankTest",
+         *  "Status": "NEW",
+         *  "PaymentId": "3093639567",
+         *  "OrderId": "21090",
+         *  "Amount": 140000,
+         *  "PaymentURL": "https://securepay.tinkoff.ru/new/fU1ppgqa"
+         *  }
          */
-        $rez = $objTBank->sendInvoiceToCustomer(
-            $posts['id_bill'],
-            strtotime($posts['dtCreate']),
-            $dtExt,
-            array("name"=>$posts['name']),
-            array(
-                "email"=>$posts['email'],
-                "phone"=>$posts['phone']
-            ),
-            array(
-                ["name"=>"Оплата занятий в группе: ".$posts['group'], "price"=>(float)$posts['price']]
-            ),
-            $posts['note']
+
+        $items = array(
+            array("Name" => "Оплата занятий в группе: ".$posts['group'], "Price" => (int)$posts['price']*100, "Quantity" => 1, "Amount" => (int)$posts['price']*100, "Tax" => "none")
         );
 
+        /**
+         * Формирование JSON
+         */
+        $objTBank->createOrder(
+            $posts['id_bill'],
+            "Оплата занятий в группе: ".$posts['group'],
+            (int)$posts['price']*100,
+            $posts['email'],
+            $posts['phone'],
+            $items);
+
+
+        /**
+         * Отправляем данные для создания счеты
+         */
+        $rez = $objTBank->sendOrder();
+
         $rez_arr = json_decode($rez, true);
-        if(array_key_exists('errorMessage', $rez_arr)){
+
+        if ($rez_arr['ErrorCode'] > 0 ){
+            /**
+             * Произошла ощибка
+             */
             Class_Alert_Message::error(
                 '<ul>'.
-                          '<li>Сервер Т-Банка вернул ошибку</li>'.
-                          '<li>errorId: '.$rez_arr['errorId'].'</li>'.
-                          '<li>errorMessage: '.$rez_arr['errorMessage'].'</li>'.
-                          '<li>errorCode: '.$rez_arr['errorCode'].'</li>'.
-                          '<li>errorDetails: '.$rez_arr['errorDetails']['Ошибка декодирования'].'</li>'.
-                      '</ul>'
+                '<li>Сервер Т-Банка вернул ошибку</li>'.
+                '<li>errorId: '.$rez_arr['ErrorCode'].'</li>'.
+                '<li>errorMessage: '.$rez_arr['errorMessage'].'</li>'.
+                '<li>errorCode: '.$rez_arr['errorCode'].'</li>'.
+                '<li>errorDetails: '.$rez_arr['errorDetails']['Ошибка декодирования'].'</li>'.
+                '</ul>'
             );
             return false;
         }
 
         /**
-         * Записать адрес чека и транзакцию в системе
+         * Записать адрес ссылки на оплату и транзакцию в системе
+         */
+        /**
+         *
+         *
+         *
+         *
+         *
+         *
+         *
+         *
+         *
+         *
+         *
+         *
+         *
          */
         $objOrder  = new Model_Orders(array("where"=>"id = " . (int)$posts['id_bill']));
         if(!$objOrder->fetchOne()){
