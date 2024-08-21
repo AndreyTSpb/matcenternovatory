@@ -142,10 +142,15 @@
     if(form_bill != null){
         let selector = form_bill.querySelector("#customers"),
             phone    = form_bill.querySelector('#phone'),
-            email    = form_bill.querySelector("#email");
+            email    = form_bill.querySelector("#email"),
+            id_group = form_bill.querySelector('#id_group'),
+            price    = form_bill.querySelector('#price');
 
+        /**
+         * Получаем данне о клиенте
+         */
         selector.addEventListener("change", (e)=>{
-            console.log(e.target.value);
+            //console.log(e.target.value);
             $.ajax({
                 url: '/customer/get_cust_info',
                 method: 'post',
@@ -160,6 +165,51 @@
                 }
             });
         });
+        /**
+         * Получаем данные о группе
+         */
+        id_group.addEventListener("change", (e)=>{
+            $.ajax({
+                url: '/group/get_group_info',
+                method: 'post',
+                dataType: 'json',
+                data: {get_group: 'Текст', id_group: e.target.value},
+                success: function(data){
+                    console.log(data);
+                    //{"email":"kotwler@mail.ru","phone":"79500239724"}
+                    //let arr = JSON.parse(data);
+                    price.value = data;
+                }
+            });
+        });
     }
 
 })();
+
+/**
+ * Сортировка таблицы
+ */
+$(document).ready(function() {
+    $('#sortTable').DataTable({
+        //disable sorting on last column
+        "columnDefs": [
+            { "orderable": false, "targets": 5 }
+        ],
+        language: {
+            //customize pagination prev and next buttons: use arrows instead of words
+            'paginate': {
+                'previous': '<span class="fa fa-chevron-left"></span>',
+                'next': '<span class="fa fa-chevron-right"></span>'
+            },
+            //customize number of elements to be displayed
+            "lengthMenu": 'Display <select class="form-control input-sm">'+
+                '<option value="10">10</option>'+
+                '<option value="20">20</option>'+
+                '<option value="30">30</option>'+
+                '<option value="40">40</option>'+
+                '<option value="50">50</option>'+
+                '<option value="-1">All</option>'+
+                '</select> results'
+        }
+    })
+} );

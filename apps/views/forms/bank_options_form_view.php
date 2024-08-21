@@ -37,6 +37,27 @@
                         </div>
                     </div>
 
+                    <div class="row">
+                        <div class="col-auto">
+                            <label for="terminalKey" class="form-label">terminalKey:</label>
+                            <input type="text" class="form-control" id="terminalKey" name="terminalKey" value="<?=(isset($terminalKey))?$terminalKey:''?>">
+                        </div>
+                        <div class="col-auto">
+                            <label for="terminalPass" class="form-label">terminalPass:</label>
+                            <input type="text" class="form-control" id="terminalPass" name="terminalPass" value="<?=(isset($terminalPass))?$terminalPass:''?>">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-auto">
+                            <label for="terminalKeyDemo" class="form-label">terminalKeyDemo:</label>
+                            <input type="text" class="form-control" id="terminalKeyDemo" name="terminalKeyDemo" value="<?=(isset($terminalKeyDemo))?$terminalKeyDemo:''?>">
+                        </div>
+                        <div class="col-auto">
+                            <label for="terminalPassDemo" class="form-label">terminalPassDemo:</label>
+                            <input type="text" class="form-control" id="terminalPassDemo" name="terminalPassDemo" value="<?=(isset($terminalPassDemo))?$terminalPassDemo:''?>">
+                        </div>
+                    </div>
+
                     <div class="col-auto">
                         <button type="submit" class="btn btn-success mb-3" name="save_tbank">Сохранить</button>
                     </div>
@@ -51,7 +72,7 @@
 <div class="row">
     <div class="col-8  m-auto">
         <div class="card">
-            <h5 class="card-header text-bg-dark">Настройки для банка</h5>
+            <h5 class="card-header text-bg-dark">Настройки для тправки писем</h5>
             <div class="card-body">
                 <form class="g-3" method="post" action="<?=$url?>/save_email_account">
                     <div class="row">

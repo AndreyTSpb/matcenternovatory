@@ -47,63 +47,9 @@ class Class_T_Bank_Api_Merch
     private $testUrlAPI = 'https://rest-api-test.tinkoff.ru/v2/Init';
 
 
-    public $jsonTest = '{
-                              "TerminalKey": "TinkoffBankTest",
-                              "Amount": 140000,
-                              "OrderId": "21090",
-                              "Description": "Подарочная карта на 1000 рублей",
-                              "Token": "68711168852240a2f34b6a8b19d2cfbd296c7d2a6dff8b23eda6278985959346",
-                              "DATA": {
-                                "Phone": "+71234567890",
-                                "Email": "a@test.com"
-                              },
-                              "Receipt": {
-                                "Email": "a@test.ru",
-                                "Phone": "+79031234567",
-                                "Taxation": "osn",
-                                "Items": [
-                                  {
-                                    "Name": "Наименование товара 1",
-                                    "Price": 10000,
-                                    "Quantity": 1,
-                                    "Amount": 10000,
-                                    "Tax": "vat10",
-                                    "Ean13": "303130323930303030630333435"
-                                  },
-                                  {
-                                    "Name": "Наименование товара 2",
-                                    "Price": 20000,
-                                    "Quantity": 2,
-                                    "Amount": 40000,
-                                    "Tax": "vat20"
-                                  },
-                                  {
-                                    "Name": "Наименование товара 3",
-                                    "Price": 30000,
-                                    "Quantity": 3,
-                                    "Amount": 90000,
-                                    "Tax": "vat10"
-                                  }
-                                ]
-                              }
-                            }';
+    public $jsonTest;
 
     private $token;
-
-    /**
-     * Пример ответа
-     * @var string
-     */
-    private $respont = '{
-                          "Success": true,
-                          "ErrorCode": "0",
-                          "TerminalKey": "TinkoffBankTest",
-                          "Status": "NEW",
-                          "PaymentId": "3093639567",
-                          "OrderId": "21090",
-                          "Amount": 140000,
-                          "PaymentURL": "https://securepay.tinkoff.ru/new/fU1ppgqa"
-                        }';
 
     public function __construct()
     {

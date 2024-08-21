@@ -87,8 +87,12 @@
                             <input type="text" class="form-control" id="transactionId" name="transactionId" value="<?=(isset($transactionId))?$transactionId:''?>">
                         </div>
                         <div class="col-md-4">
-                            <p></p>
-                            <p><a href="<?=(isset($pdfUrl))?$pdfUrl:'#'?>">Ссылка на счет</a></p>
+                            <label for="payUrl" class="form-label">Ссылка на плату картой:</label>
+                            <input type="text" class="form-control" id="payUrl" name="payUrl" value="<?=(isset($pdfUrl))?$pdfUrl:''?>">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="qr_link" class="form-label">Ссылка на оплату QR-code:</label>
+                            <input type="text" class="form-control" id="qr_link" name="qr_link" value="<?=(isset($qr_link))?$qr_link:''?>">
                         </div>
                     </div>
 

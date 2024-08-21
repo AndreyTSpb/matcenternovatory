@@ -58,7 +58,7 @@ class Model_Bills extends Model
                  *  [note] => test 1
                  * )
                  */
-                if($row['status'] == 1 ) $pay = "Оплачен"; elseif ($row['status'] == 2) $pay = "Отменен"; else $pay = "Не оплачен";
+                if($row['status'] == 1 ) $pay = "<span class='text-success'>Оплачен</span>"; elseif ($row['status'] == 2) $pay = "<span class='text-danger'>Отменен</span>"; else $pay = "Не оплачен";
                 $send = ($row['send'] == 1)?"Отправлен":"Не отправлен";
                 $arr[] = array(
                     'class_tr' => 'table-light',

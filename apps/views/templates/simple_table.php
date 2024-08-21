@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table class="table table-striped table-sm table-search">
+    <table class="table table-striped table-sm table-search" id="sortTable">
         <thead>
             <tr>
                 <?php foreach ($header as $th):?>

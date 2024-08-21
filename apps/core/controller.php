@@ -15,6 +15,7 @@ class Controller {
 
     public function __construct()
     {
+        if($_SERVER['REQUEST_URI'] == '/notification')  return true;
         $this->model = new Model();
 
         /**
@@ -22,28 +23,28 @@ class Controller {
          */
         $this->url = $url = $_SERVER['REQUEST_URI'];
 
-        $this->data['nameCompany']  = $this->model->nameCompany;
+        $this->data['nameCompany'] = $this->model->nameCompany;
         $this->data['labelCompany'] = $this->model->labelCompany;
-        $this->data['menu']         = Class_Admin_Menu::getArr();
-        $this->data['url']          = $this->url;
+        $this->data['menu'] = Class_Admin_Menu::getArr();
+        $this->data['url'] = $this->url;
         $this->data['view_menu_file'] = 'super_admin_menu.php';
 
         //Проверка заполнены ли куки и соответствуют ли они регистрационным данным
         $objChek = new Class_ChekPass();
 
 
-        if(!isset($_COOKIE['id_user']) OR !isset($_COOKIE['session_id']) OR !$objChek->checkCookie($_COOKIE['id_user'], $_COOKIE['session_id'])){
+        if (!isset($_COOKIE['id_user']) OR !isset($_COOKIE['session_id']) OR !$objChek->checkCookie($_COOKIE['id_user'], $_COOKIE['session_id'])) {
             $url = $_SERVER['REQUEST_URI'];
             //Если это не страница авторизации переводим на нее
-            if($url !== "/login"){
+            if ($url !== "/login") {
                 header("Location: /login");
                 exit();
             }
         }
 
         $this->view = new View();
-        if(!empty($_COOKIE['id_user'])) $this->model->id_user = (int)$_COOKIE['id_user'];
-        if(!empty($_COOKIE['session_id'])) $this->model->session_id = $_COOKIE['session_id'];
+        if (!empty($_COOKIE['id_user'])) $this->model->id_user = (int)$_COOKIE['id_user'];
+        if (!empty($_COOKIE['session_id'])) $this->model->session_id = $_COOKIE['session_id'];
 
     }
 

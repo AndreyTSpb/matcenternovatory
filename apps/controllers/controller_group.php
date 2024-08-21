@@ -126,4 +126,16 @@ class Controller_Group extends Controller
         header("Location: /groups");
         exit();
     }
+
+    public function action_get_group_info(){
+        if(isset($_POST['get_group'])){
+            $id = (int)$_POST['id_group'];
+            if(!$id){
+                exit("No ID");
+            }
+            $obj = new Class_Get_Group_Info($id);
+            exit($obj->price);
+        }
+        exit("No post");
+    }
 }
