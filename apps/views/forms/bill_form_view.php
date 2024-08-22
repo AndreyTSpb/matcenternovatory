@@ -64,6 +64,17 @@
                         </div>
                     </div>
 
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <label class="form-label">Месяцы:</label>
+                            <?php $months = Class_Rus_Name_Date::month(); for ($i = 1; $i < count($months); $i++):?>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" <?=(isset($monthes) AND $monthes[$i])?'checked':'';?> value="<?=$i;?>" name="monthes[]>
+                                    <label class="form-check-label" for="inlineCheckbox1"><?=$months[$i];?></label>
+                                </div>
+                            <?php endfor;?>
+                        </div>
+                    </div>
 
                     <div class="row">
                         <div class="col-md-4">

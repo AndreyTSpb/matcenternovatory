@@ -114,7 +114,7 @@ class Model_Group extends Model
          */
         if(isset($posts['id_teach']) AND is_array($posts['id_teach'])){
             foreach ($posts['id_teach'] AS $id_teach){
-                if(!Class_Add_Teachers_To_Group::addTeach($id_group, $id_teach, time())){
+                if(!Class_Add_Teachers_To_Group::addTeach($this->id_group, $id_teach, time())){
                     Class_Alert_Message::error('Препод не добавлен');
                     return false;
                 }
@@ -130,6 +130,7 @@ class Model_Group extends Model
          * Данные о группе
          */
         $data['groupInfo'] = $this->groupInfo();
+        $data['userToGroup'] = $this->getUsers_Group();
         return Class_Get_Buffer::returnBuffer('forms/group_info_view.php', $data);
     }
 
@@ -197,5 +198,85 @@ class Model_Group extends Model
             return false;
         }
         return true;
+    }
+
+
+    public function getUsers_Group(){
+        return Class_Create_Simple_Table::html($this->headerTableUsers(), $this->getUsers());
+    }
+
+    private function headerTableUsers()
+    {
+        return array("ПП", "Ид", "ФИО", "Счет", "Сумма оплаты", "Дата оплаты", "Месяц", "Действия");
+    }
+
+    private function getUsers()
+    {
+        global $link;
+        $sql = "SELECT cus.id AS id_user, ".
+            "cus.name AS name, cus.email AS email, cus.phone AS phone, ".
+            "ord.id_group AS id_group, ord.price AS price, ".
+            "ord.dt_pay  AS dt_pay, ord.month AS `month`, ".
+            "ord.id AS id_bill, ord.dt AS dt_order ".
+            "FROM `customers` AS cus LEFT JOIN orders AS ord ON cus.id = ord.id_user ".
+            "WHERE ord.status = 1 AND ord.id_group = ".$this->id_group." ORDER BY cus.name ASC;";
+
+        ///exit($sql);
+        $list = array();
+
+        $obj = $link->query($sql);
+        if(!$obj->num_rows){
+            /**
+             * Поумолчанию если нет данных
+             */
+            $list[] = array(
+                'class_tr' => 'table-light',
+                'tds' => array(
+                    "pp"        => 1,
+                    "id"        =>'1',
+                    "period"    => 'Нет данных',
+                    "bill"    => 'Нет данных',
+                    "groupName" => 'Нет данных',
+                    "daysWeak"  => 'Нет данных',
+                    "maxUsers"  => 'Нет данных',
+                    "teachers"  => 'Нет данных'
+                )
+            );
+        }else{
+            $rusMonth = Class_Rus_Name_Date::month();
+            while ($item = $obj->fetch_assoc()){
+                $str_month = "";
+                foreach (explode(', ', $item['month']) AS $month)  $str_month .= $rusMonth[$month];
+                $list[] = array(
+                    'class_tr' => 'table-light',
+                    'tds' => array(
+                        "pp" => 1,
+                        "id" => $item['id_user'],
+                        "name" => "<a href='/customer/edit?id=".$item['id_user']."'>".$item['name']."</a>",
+                        "order" => "<a href='/bill?id=".$item['id_bill']."'> Счет №".$item['id_bill']." от ".date("d.m.Y", strtotime($item['dt_order']))."</a>",
+                        "price" => $item['price'],
+                        "dt_pay" => date("d.m.Y", $item['dt_pay']),
+                        "month" => $str_month,
+                        "teachers" => 'Нет данных'
+                    )
+                );
+            }
+        }
+        return $list;
+    }
+
+
+    public function getTachers_Group(){
+        return Class_Create_Simple_Table::html($this->headerTableTeacher(), $this->getTeachers());
+    }
+
+    private function headerTableTeacher()
+    {
+
+    }
+
+    private function getTeachers()
+    {
+
     }
 }

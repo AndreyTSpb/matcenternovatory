@@ -22,7 +22,7 @@ class Controller_T_API extends Controller
          *  "PaymentId":4885043690
          * }
          **/
-        //echo $obj->getQR('4885043690');
+        echo $obj->getQR('4898237880');
         exit();
     }
 }

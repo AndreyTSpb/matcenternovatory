@@ -20,6 +20,7 @@ class Model_All_Teachers extends Model
                     "period"    => 'Нет данных',
                     "groupName" => 'Нет данных',
                     "daysWeak"  => 'Нет данных',
+                    "del"  => 'Нет данных',
                     "maxUsers"  => 'Нет данных'
                 )
             );
@@ -27,6 +28,7 @@ class Model_All_Teachers extends Model
             $rows = $obj->getAllRows();
             //
             foreach ($rows AS $row){
+                $del = ($row['del'] == 1) ? "Удален": "Действующий";
                 $arr[] = array(
                     'class_tr' => 'table-light',
                     'tds' => array(
@@ -35,6 +37,7 @@ class Model_All_Teachers extends Model
                         "name"      => "<a href='/teacher/edit?id=".$row['id']."'>".$row['name']."</a>",
                         "phone"     => '+'.$row['phone'],
                         "email"     => $row['email'],
+                        "del"     => $del,
                         "action"    => 'Нет данных'
                     )
                 );
@@ -44,6 +47,6 @@ class Model_All_Teachers extends Model
     }
 
     function headerTable(){
-        return array("ПП", "Ид", "Препод", "Телефон", "E-Mail", "Действия");
+        return array("ПП", "Ид", "Препод", "Телефон", "E-Mail", "Статус","Действия");
     }
 }

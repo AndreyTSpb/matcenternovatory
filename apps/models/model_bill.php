@@ -56,6 +56,8 @@ class Model_Bill extends Model
         //
         $objGroup = new Class_Get_Group_Info($obj->id_group);
 
+        $months = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0);
+
         return array(
             'id_bill'   => $this->id_bill,
             'status'    => $status,
@@ -76,7 +78,9 @@ class Model_Bill extends Model
             'dtExt'    => date("Y-m-d", $obj->dt_ext),
             'transactionId' => $obj->transaction_id,
             'pdfUrl'        => $obj->pdf_url,
-            'note'          => $obj->note
+            'note'          => $obj->note,
+            'monthes'        => $months,
+            'qr_link'        => $obj->qr_link
         );
     }
 
@@ -117,6 +121,13 @@ class Model_Bill extends Model
         $obj->price     =   (float)$posts['price'];
         $obj->dt_ext    =   strtotime($posts['dtExt']);
         $obj->note      =   htmlspecialchars($posts['note']);
+
+        if (isset($posts['monthes']) AND !empty($posts['monthes']))
+            $month = implode(', ', $posts['monthes']);
+        else
+            $month = date('n', time());
+
+        $obj->month     = $month;
         $id_bill = $obj->save();
         if(!$id_bill) {
             Class_Alert_Message::error('Счет не создан');
@@ -222,6 +233,27 @@ class Model_Bill extends Model
          */
 
         /**
+         * Получить ссылку на КУАРкод
+         */
+        $objQrCode = $objTBank->getQR($rez_arr['PaymentId']);
+        /**
+         * {
+         *  "Success":true,
+         *  "ErrorCode":"0",
+         *  "Message":"OK",
+         *  "TerminalKey":"1723638759099",
+         *  "Data":"https://qr.nspk.ru/BD10003PNOIEHROP87BQ88PETSL1UAOE?type=02&bank=100000000004&sum=12300&cur=RUB&crc=A72B",
+         *  "OrderId":"15",
+         *  "PaymentId":4885043690
+         * }
+         * Array ( [Success] => 1 [ErrorCode] => 0 [Message] => OK [TerminalKey] => 1723638759099 [Data] => https://qr.nspk.ru/BD1000558EARTDFJ8RBPNFPDK4S01N9I?type=02&bank=100000000004&sum=450000&cur=RUB&crc=5C48 [OrderId] => 235 [PaymentId] => 4899343055 )
+         **/
+        $arrQrCode = json_decode($objQrCode, true);
+        //print_r($arrQrCode);
+        //exit();
+        if($arrQrCode['Success'])  $qr = $arrQrCode['Data']; else $qr ='';
+
+        /**
          * Записать адрес ссылки на оплату и транзакцию в системе
          */
         $objOrder  = new Model_Orders(array("where"=>"id = " . (int)$rez_arr['OrderId']));
@@ -231,6 +263,7 @@ class Model_Bill extends Model
         }
         $objOrder->transaction_id = $rez_arr['PaymentId'];
         $objOrder->pdf_url  =   $rez_arr['PaymentURL'];
+        $objOrder->qr_link  =   $qr;
 
         $objOrder->send     =   0;
         if(!$objOrder->update()) {
@@ -272,7 +305,9 @@ class Model_Bill extends Model
             Class_Alert_Message::error('НЕ найден счет чтобы внести внего ответ с сбанка');
             return false;
         }
-        $pay_url = $objOrder->pdf_url;
+        $qr_code = $objOrder->qr_link;
+        if(empty($qr_code)) $pay_url = $objOrder->pdf_url; else $pay_url = $qr_code;
+
         if(!$pay_url){
             Class_Alert_Message::error('НЕ найден ссылка на оплату');
             return false;

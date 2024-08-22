@@ -10,7 +10,7 @@ class Model_Bills extends Model
 
     private function headerTable()
     {
-        return array("ПП", "Счет", "Клиент", "Группа", "Цена", "Оплачен", "Отправлен", "Дата выставления", "Дата оплаты", "Действия");
+        return array("ПП", "Счет", "Клиент", "Группа", "Цена", "Месяцы","Оплачен", "Отправлен", "Дата выставления", "Дата оплаты", "Действия");
     }
 
     private function bodyTable(){
@@ -33,6 +33,7 @@ class Model_Bills extends Model
                     "send"      => 'Нет данных',
                     "dt_create" => 'Нет данных',
                     "dt_pay"    => 'Нет данных',
+                    "months"    => 'Нет данных',
                     "action"    => 'Нет данных'
                 )
             );
@@ -60,6 +61,13 @@ class Model_Bills extends Model
                  */
                 if($row['status'] == 1 ) $pay = "<span class='text-success'>Оплачен</span>"; elseif ($row['status'] == 2) $pay = "<span class='text-danger'>Отменен</span>"; else $pay = "Не оплачен";
                 $send = ($row['send'] == 1)?"Отправлен":"Не отправлен";
+
+                $arr_month = explode(', ', $row['month']);
+                $str_month = '';
+                foreach ($arr_month AS $month){
+                    $str_month .= Class_Rus_Name_Date::month()[$month] . ", ";
+                }
+
                 $arr[] = array(
                     'class_tr' => 'table-light',
                     'tds' => array(
@@ -68,6 +76,7 @@ class Model_Bills extends Model
                         "customer"  => "<a href='/bill?id=".$row['id']."'>".Class_Get_Name_Customer::name($row['id_user'])."</a>",
                         "group"     => "<a href='/bill?id=".$row['id']."'>".Class_Get_Name_Group::name($row['id_group'])."</a>",
                         "price"     => $row['price'],
+                        "months"    => trim($str_month, ', '),
                         "pay"       => $pay,
                         "send"      => $send,
                         "dt_create" => date("d.m.Y", strtotime($row['dt'])),

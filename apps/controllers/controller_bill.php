@@ -49,6 +49,7 @@ class Controller_Bill extends Controller
     }
 
     public function action_save(){
+
         if(isset($_POST['id_bill']) AND !empty($_POST['id_bill'])) $this->model->id_bill = (int)$_POST['id_bill'];
         /**
          * Сохраняем счет

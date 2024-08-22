@@ -50,13 +50,13 @@ class Model_All_Groups extends Model
             $rows = $obj->getAllRows();
             foreach ($rows AS $item){
                 $strDay = '';
-                if($item['mon']) $strDay .="mon, ";
-                if($item['tue']) $strDay .="tue, ";
-                if($item['wed']) $strDay .="wed, ";
-                if($item['thu']) $strDay .="thu, ";
-                if($item['fri']) $strDay .="fri, ";
-                if($item['sat']) $strDay .="sat, ";
-                if($item['sun']) $strDay .="sun, ";
+                if($item['mon']) $strDay .="Пн, ";
+                if($item['tue']) $strDay .="Вт, ";
+                if($item['wed']) $strDay .="Ср, ";
+                if($item['thu']) $strDay .="Чт, ";
+                if($item['fri']) $strDay .="Пт, ";
+                if($item['sat']) $strDay .="Сб, ";
+                if($item['sun']) $strDay .="Вс, ";
                 $listGroups[] = array(
                     'class_tr' => 'table-light',
                     'tds' => array(

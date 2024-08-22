@@ -62,4 +62,13 @@
             </div>
         </div>
     </div>
+
+    <div class="col-8  m-auto">
+        <div class="card">
+            <h5 class="card-header text-bg-dark">Список оплативших</h5>
+            <div class="card-body">
+                <?=$userToGroup;?>
+            </div>
+        </div>
+    </div>
 </div>
