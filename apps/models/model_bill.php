@@ -56,7 +56,12 @@ class Model_Bill extends Model
         //
         $objGroup = new Class_Get_Group_Info($obj->id_group);
 
-        $months = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0);
+        $arr_months =  explode(',', $obj->month);
+        $months = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        foreach ($arr_months AS $month){
+            $months[trim($month)] = 1;
+        }
+
 
         return array(
             'id_bill'   => $this->id_bill,
