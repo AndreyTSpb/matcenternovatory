@@ -148,6 +148,36 @@ class Model_Bill extends Model
         return $id_bill;
     }
 
+    function updateBill($posts){
+        /**
+         * Array (
+         *      [name] => Тарас Степанович Пупкин
+         *      [id_cust] => 2
+         *      [phone] => 79523752922
+         *      [email] => tynyanyi@mail.ru
+         *      [id_group] => 32
+         *      [price] => 1000
+         *      [fee] => 0
+         *      [monthes] => Array ( [0] => 9 )
+         *      [dtExt] => 2024-08-15
+         *      [dtCreate] => 2024-08-12
+         *      [dtPay] => 1970-01-01
+         *      [transactionId] =>
+         *      [payUrl] =>
+         *      [qr_link] =>
+         *      [note] => test
+         *      [id_bill] => 1
+         *      [update_invoice] =>
+         * )
+         */
+        $obj = new Model_Orders(['where'=>"id=".(int)$posts['id_bill']." AND id_user = ".(int)$posts['id_cust']]);
+        if(!$obj->fetchOne()){return false;}
+        $obj->id_group = $posts['id_group'];
+        if(!$obj->update()) return false;
+        Class_Alert_Message::succes("Группа обновлена");
+        return $posts['id_bill'];
+    }
+
     function del_bill(){
         $obj = new Model_Orders(array("where"=>"id = ".(int)$this->id_bill));
         if(!$obj->fetchOne()) return false;

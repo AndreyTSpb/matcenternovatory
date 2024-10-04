@@ -63,6 +63,15 @@ class Controller_Bill extends Controller
             header('Location: /bill?id='.$id_bill);
             exit();
         }
+        if(isset($_POST['update_invoice'])){
+            $id_bill = $this->model->updateBill($_POST);
+            if(!$id_bill){
+                header('Location: /bill/add');
+                exit();
+            }
+            header('Location: /bill?id='.$id_bill);
+            exit();
+        }
         /**
          * Отправляем счет на оплату
          */

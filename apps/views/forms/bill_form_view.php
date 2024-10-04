@@ -40,15 +40,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <label for="id_group" class="form-label">Группа:</label>
-                            <?php if(isset($id_bill) AND !empty($id_bill)):?>
-                                <input type="text" class="form-control" id="group" name="group" value="<?=(isset($group_name))?$group_name:''?>">
-                                <input type="hidden" name="id_group" value="<?=$id_group;?>">
-                            <?php else:?>
-                                <?php
-                                    $dropListGroups = new Class_Droplist_Groups();
-                                    echo $dropListGroups->html;
-                                ?>
-                            <?php endif;?>
+                            <?php
+                                $dropListGroups = new Class_Droplist_Groups();
+                                if(isset($id_bill) AND !empty($id_bill)){
+                                    $dropListGroups->id_group = $id_group;
+                                }
+                                echo $dropListGroups->html();
+                            ?>
                         </div>
                         <div class="col-md-6">
                             <div class="row">
@@ -126,6 +124,7 @@
                             <?php else:?>
                                 <button form="test_form" type="submit" class="btn btn-info mb-3" name="send">Проверить</button>
                             <?php endif;?>
+                            <button type="submit" class="btn btn-success mb-3" name="update_invoice">Обновить</button>
                         <?php else:?>
                             <button type="submit" class="btn btn-success mb-3" name="save_invoice">Сохранить</button>
                         <?php endif;?>
