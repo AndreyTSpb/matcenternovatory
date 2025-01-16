@@ -101,6 +101,10 @@ class Model_Bills extends Model
         foreach ($rows AS $row){
             $obj = new Class_T_Bank_API();
             $rez_arr = json_decode($obj->getInfoInvoice($row['transaction_id']), true);
+            if(!is_iterable($rez_arr)) {
+                Class_Alert_Message::succes("Пустой результат запроса в Т-Банк проверки оплаченных счетов");
+                return false;
+            }
             if(array_key_exists('status', $rez_arr)){
                 if($rez_arr['status'] == 'EXECUTED'){
                     Class_Bill_Status_Update::update($row['id'], 1);

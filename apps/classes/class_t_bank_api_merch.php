@@ -5,7 +5,7 @@
  * Date: 18/08/2024
  * Time: 18:33
  */
-
+//https://www.tbank.ru/kassa/dev/payments/#tag/Standartnyj-platezh/operation/Init - instructions
 class Class_T_Bank_Api_Merch
 {
     /**
@@ -228,12 +228,17 @@ class Class_T_Bank_Api_Merch
 
     public function createOrder($orderId, $description, $amount, $emailCustomer, $phoneCustomer, $items){
 
+        ////YYYY-MM-DDTHH24:MI:SS+GMT date(DATE_ATOM, mktime(0, 0, 0, 7, 1, 2000));
+
+        $dt = time()+5*24*60*60;
+
         $arr = array(
             "TerminalKey" =>    $this->terminalKey,
             "Amount"    =>  $amount,
             "OrderId"   =>  $orderId,
             "Description"   =>  $description,
             "Token" =>  $this->createToken($amount, $orderId, $description),
+            "RedirectDueDate" => date(DATE_ATOM, $dt),
             "DATA"  =>  array(
                 "Phone" => "+".$phoneCustomer,
                 "Email" => $emailCustomer
