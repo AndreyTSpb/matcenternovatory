@@ -64,12 +64,16 @@
             <?php var_dump($_SESSION);?>
         </section>
 
-        <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-        
+        <!--script src="https://code.jquery.com/jquery-3.6.0.js"></script-->
+        <script src="<?=DOCUMENT_ROOT?>/web/js/jquery-3.6.0.js"></script>
+
         <!-- Data Table JS -->
-        <script src='https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js'></script>
-        <script src='https://cdn.datatables.net/responsive/2.1.0/js/dataTables.responsive.min.js'></script>
-        <script src='https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js'></script>
+        <!--script src='https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js'></script-->
+        <script src='<?=DOCUMENT_ROOT?>/web/js/jquery.dataTables.min.js'></script>
+        <!--script src='https://cdn.datatables.net/responsive/2.1.0/js/dataTables.responsive.min.js'></script-->
+        <script src='<?=DOCUMENT_ROOT?>/web/js/dataTables.responsive.min.js'></script>
+        <!--script src='https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js'></script-->
+        <script src='<?=DOCUMENT_ROOT?>/web/js/dataTables.bootstrap5.min.js'></script>
 
 
         <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
